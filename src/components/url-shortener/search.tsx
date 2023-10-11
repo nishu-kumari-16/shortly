@@ -34,7 +34,6 @@ const SearchContainer = () => {
     setLoading(true);
     try {
       const { data } = await axios.request(options);
-      console.log(data);
       const { result_url } = data;
       result_url &&
         setSearchResult((prevState) => [
