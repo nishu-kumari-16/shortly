@@ -22,7 +22,11 @@ const HeroSection = () => {
           Get Started
         </button>
       </div>
-      <img src={HeroImage} className="flex-1 mr-[-10%]" alt="img" />
+      <img
+        src={HeroImage}
+        className="flex-1 tablet:mr-[-40%] laptop:mr-[-10%] mr-[0] self-center h-fit"
+        alt="img"
+      />
     </div>
   );
 };
