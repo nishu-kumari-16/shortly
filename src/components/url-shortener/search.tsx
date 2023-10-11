@@ -1,6 +1,7 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import SearchBackground from "../../assets/url-shortner/bg-shorten-desktop.svg";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const SearchContainer = () => {
   const [searchKey, setSearchKey] = useState<string>("");
@@ -18,7 +19,38 @@ const SearchContainer = () => {
     setSearchKey(event.target.value);
   };
 
-  const onSearch = async () => {
+  const getShortenedUrl = async () => {
+    const encodedParams = new URLSearchParams();
+    encodedParams.set("url", searchKey);
+    const options = {
+      method: "POST",
+      url: "https://url-shortener-service.p.rapidapi.com/shorten",
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+        "X-RapidAPI-Key": "24397b3c22msh5c8800231cb5539p122b57jsn9a41b7b5cbeb",
+        "X-RapidAPI-Host": "url-shortener-service.p.rapidapi.com",
+      },
+      data: encodedParams,
+    };
+    setLoading(true);
+    try {
+      const { data } = await axios.request(options);
+      console.log(data);
+      const { result_url } = data;
+      result_url &&
+        setSearchResult((prevState) => [
+          ...prevState,
+          { actualLink: searchKey, shortenedLink: result_url },
+        ]);
+    } catch (error: any) {
+      setError("This domain blocked in our system");
+    }
+
+    setLoading(false);
+    setSearchKey("");
+  };
+
+  const onSearch = () => {
     if (!searchKey) {
       setError("Please enter url");
       return;
@@ -32,25 +64,7 @@ const SearchContainer = () => {
       setError("Link is already present. Please try with some other links");
       return;
     }
-    setLoading(true);
-    try {
-      const { data } = await axios.get("https://api.shrtco.de/v2/shorten", {
-        params: { url: searchKey },
-      });
-      if (data?.result) {
-        const { full_short_link } = data?.result;
-        setSearchResult((prevState) => [
-          ...prevState,
-          { actualLink: searchKey, shortenedLink: full_short_link },
-        ]);
-      }
-    } catch (error: any) {
-      const { response } = error;
-      console.log(response.data.error);
-    }
-
-    setLoading(false);
-    setSearchKey("");
+    getShortenedUrl();
   };
 
   useEffect(() => {
@@ -60,6 +74,13 @@ const SearchContainer = () => {
   useEffect(() => {
     savedData && setSearchResult(JSON.parse(savedData));
   }, []);
+
+  useEffect(() => {
+    copiedIndex !== -1 &&
+      setTimeout(() => {
+        setCopiedIndex(-1);
+      }, 1000);
+  }, [copiedIndex]);
 
   return (
     <div className="flex flex-col gap-6 mt-[-5rem] mx-[1.5rem] tablet:mx-[6rem]">
@@ -84,7 +105,7 @@ const SearchContainer = () => {
         </div>
         <img
           src={SearchBackground}
-          className="absolute top-0 left-0 right-0 bottom-0"
+          className="absolute top-0 left-0 right-0 bottom-0 w-full h-full"
           alt="search-bg"
         />
       </div>
@@ -98,9 +119,12 @@ const SearchContainer = () => {
               {data.actualLink}
             </div>
             <div className="flex gap-6 items-center flex-wrap">
-              <div className="text-cyan break-words overflow-hidden text-sm">
+              <a
+                href={data?.shortenedLink}
+                className="text-cyan break-words overflow-hidden text-sm"
+              >
                 {data.shortenedLink}
-              </div>
+              </a>
               <button
                 className={` ${
                   copiedIndex === index && "bg-darkViolet"
