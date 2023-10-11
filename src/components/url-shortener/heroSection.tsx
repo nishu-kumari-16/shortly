@@ -2,8 +2,8 @@ import HeroImage from "../../assets/url-shortner/illustration-working.svg";
 
 const HeroSection = () => {
   return (
-    <div className="flex flex-col-reverse tablet:flex-row relative py-[8rem]  pl-[1.5rem] tablet:pl-[6rem] text-center tablet:text-left gap-4">
-      <div className="flex flex-col gap-4 flex-1 justify-center items-center tablet:items-start">
+    <div className="flex flex-col-reverse tablet:flex-row relative py-[8rem]  text-center tablet:text-left gap-4">
+      <div className="flex flex-col gap-4 flex-1 justify-center items-center tablet:items-start tablet:pr-0 pr-[1.5rem] pl-[1.5rem] tablet:pl-[6rem]">
         <div className="text-veryDarkBlue text-[2rem] tablet:text-[4rem] font-semibold leading-[2.25rem] tablet:leading-[5rem]">
           More than just shorter links
         </div>

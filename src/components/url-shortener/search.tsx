@@ -1,7 +1,6 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import SearchBackground from "../../assets/url-shortner/bg-shorten-desktop.svg";
 import axios from "axios";
-import { Link } from "react-router-dom";
 
 const SearchContainer = () => {
   const [searchKey, setSearchKey] = useState<string>("");
@@ -45,7 +44,6 @@ const SearchContainer = () => {
     } catch (error: any) {
       setError("This domain blocked in our system");
     }
-
     setLoading(false);
     setSearchKey("");
   };
