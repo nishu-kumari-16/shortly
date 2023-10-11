@@ -1,0 +1,17 @@
+.side-drawer-enter {
+  opacity: 0;
+  transform: scale(0.9);
+}
+.side-drawer-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+.side-drawer-exit {
+  opacity: 1;
+}
+.side-drawer-exit-active {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 300ms, transform 300ms;
+}
